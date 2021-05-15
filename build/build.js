@@ -33,6 +33,7 @@ function createPartition(Partition) {
     var debut = 0.0;
     var fin = 0.5;
     var note;
+    var mot = 0;
     var chanson = {
         notes: [],
         totalTime: 0
@@ -41,12 +42,13 @@ function createPartition(Partition) {
     for (var i = 0; i < x; i++) {
         var y = Partition[i].length;
         for (var j = 0; j < y; j++) {
-            note = { pitch: (unchar(Partition[i][j]) - 65 + 30), startTime: debut, endTime: fin };
-            chanson.notes.push(note);
-            debut = debut + 0.5;
-            fin = fin + 0.5;
-            chanson.totalTime = chanson.totalTime + 0.5;
+            mot = (mot + unchar(Partition[i][j]) - 65 + 30) / y;
         }
+        note = { pitch: mot, startTime: debut, endTime: fin };
+        chanson.notes.push(note);
+        debut = debut + 0.5;
+        fin = fin + 0.5;
+        chanson.totalTime = chanson.totalTime + 0.5;
     }
     return chanson;
 }

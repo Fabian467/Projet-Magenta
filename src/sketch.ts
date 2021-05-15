@@ -50,6 +50,7 @@ function separer(Usertext) {
     let debut = 0.0;
     let fin = 0.5;
     let note;
+    let mot = 0;
     const chanson = {
       notes:[],
       totalTime : 0
@@ -58,12 +59,13 @@ function separer(Usertext) {
     for(let i=0; i<x;i++){
       let y = Partition[i].length;
       for(let j=0; j<y; j++){
-        note = {pitch:(unchar(Partition[i][j]) - 65 + 30), startTime: debut, endTime: fin};
-        chanson.notes.push(note);
-        debut = debut + 0.5;
-        fin = fin + 0.5;
-        chanson.totalTime = chanson.totalTime + 0.5;      
+        mot = (mot + unchar(Partition[i][j]) - 65 + 30)/y;
       }
+      note = {pitch: mot, startTime: debut, endTime: fin};
+      chanson.notes.push(note);
+      debut = debut + 0.5;
+      fin = fin + 0.5;
+      chanson.totalTime = chanson.totalTime + 0.5;
     }
     return chanson;
 }
