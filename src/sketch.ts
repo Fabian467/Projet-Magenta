@@ -45,7 +45,7 @@ function setup() {
     .continueSequence(qns, 20,2.5)
     .then((sample) => rnnPlayer.start(sample));
     };
-  };
+  }
 }
 
 function newTyping(){
