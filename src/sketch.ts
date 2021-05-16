@@ -27,29 +27,9 @@ let Partition;
 let button;
 const chant;
 const player;
+var font;
 
-function setup() {
 
-    // création de l'espace
-    p6_CreateCanvas();
-
-    // boite pour rentrer le texte
-    Usertext = createInput('Music is the language of the spirit. It opens the secret of life bringing peace, abolishing strife.');
-    Usertext.position(20,75);
-    Usertext.style('background','transparent');
-    Usertext.style('border','#ffffff');
-    Usertext.style('outline','none');
-
-    // affichage bouton
-    button = createButton('Play');
-    button.position(windowWidth/2, windowHeight/3);
-    button.mousePressed(start);
-    button.style('font-size', '30px');
-    button.style('color', '#ffffff');
-    button.style('border','none');
-    button.style('font-family', 'Helvetica');
-    button.style('background-color', '#260E63');
-}
 
 // fonction pour commencer le programme
 function start() {
@@ -133,33 +113,91 @@ function backgroundWords() {
     }
 }  
 
+
+
+
+// Chargement des polices et des images
+function preload() {
+  titlefont = loadFont('./fonts/Pacifico-Regular.ttf');
+  textfont = loadFont('./fonts/Montserrat-Medium.ttf');
+  img = loadImage('./img/cloud.png');
+}
+
+
+
+function setup() {
+
+  // création de l'espace
+  p6_CreateCanvas();
+
+  // boite pour rentrer le texte
+  Usertext = createInput('Music is the language of the spirit. It opens the secret of life bringing peace, abolishing strife.');
+  Usertext.position(0,windowHeight/5+20);
+  Usertext.style('background','transparent');
+  Usertext.style('border','none');
+  Usertext.style('outline','none');
+  Usertext.style('color', '#2a3d66');
+  Usertext.style('textAlign', 'center');
+  Usertext.size(windowWidth);
+
+  // affichage bouton
+  button = createButton('Play');
+  button.position(windowWidth/2-50, windowHeight/3.5);
+  button.mousePressed(start);
+  button.style('font-size', '30px');
+  button.style('color', '#ffffff');
+  button.style('border','none');
+  button.style('font-family', 'Helvetica');
+  button.style('background-color', '#2a3d66');
+  button.size(100);
+}
+
+
+
 // Décor
 function draw() {
+
   background('#DA9FF8');
 
-  //titre
-  //strokeWeight(0);
-  fill('#6751C4');
-  textSize(50);
+  // Titre "Muse"
+  fill('#2a3d66');
+  textSize(80);
   textStyle(BOLDITALIC);
+  textFont(titlefont);
   textAlign(CENTER, CENTER);
-  text('Muse', windowWidth/2, 60);
+  text('Muse', windowWidth/2, windowHeight/10);
   
-  //texte info
+  // Texte informatif "type your text here:"
+  textSize(30);
+  textStyle(NORMAL);
+  textFont(textfont);
+  text('Type your text here:', windowWidth/2, windowHeight/5.5);
 
+  // Nuages ~
+  image(img, 0, windowHeight/4, img.width / 2, img.height / 2);
 
-  //rectangle bas
+  // Rectangle bas
   fill('#B088F9');
   noStroke();
   rect(0, windowHeight/3, windowWidth, 2*windowHeight/3);
 
-  //texte utilisateur
+  // Crédits de bas de page
+  fill('#ffffff');
+  textSize(15);
+  textAlign(LEFT, BOTTOM);
+  text('Fabian Santiago, Cindy Hartmann', 20, windowHeight-20);
+  textAlign(RIGHT, BOTTOM);
+  text('Algortihmic Aesthetic Project ~ 2021', windowWidth-20, windowHeight-20);
 
-  fill('#000000');
-  textSize(20);
-  text(Usertext.value(), 50,700);
+  // Texte rentré par l'utilisateur
+  textSize(35);
+  fill('#2a3d66');
+  textFont(titlefont);
+  textAlign(CENTER, CENTER);
+  text("\" "+Usertext.value()+" \"", windowWidth/2,windowHeight/2);
   
   h1.html(Usertext.value() );
+
 }
 
 // fonction pour resize
