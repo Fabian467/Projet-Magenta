@@ -88,14 +88,6 @@ function separer(Usertext) {
     return chanson;
   }
 
-function playInterpolation() {
-  const vaePlayer = new mm.Player();
-    if (vaePlayer.isPlaying()) {
-      vaePlayer.stop();
-      return;
-    }
-  }
-
 function windowResized() {
     p6_ResizeCanvas()
 }
