@@ -2,9 +2,11 @@ var gui = new dat.GUI();
 var params = {
     Download_Image: function () { return save(); },
     Nombre: 0,
-    steps: 4,
+    steps: 30,
     temperature: 1,
 };
+gui.add(params, "steps", 30, 100, 5);
+gui.add(params, "temperature", 1, 10, 0.5);
 var Usertext;
 var output;
 var Tabmot;
@@ -31,7 +33,7 @@ function setup() {
             console.log(chant.notes);
             var qns = mm.sequences.quantizeNoteSequence(chant, 4);
             music_rnn
-                .continueSequence(qns, 20, 2.5)
+                .continueSequence(qns, params.steps, params.temperature)
                 .then(function (sample) { return rnnPlayer.start(sample); });
         };
     };
@@ -72,13 +74,6 @@ function createPartition(Partition) {
         chanson.totalTime = chanson.totalTime + 0.5;
     }
     return chanson;
-}
-function playInterpolation() {
-    var vaePlayer = new mm.Player();
-    if (vaePlayer.isPlaying()) {
-        vaePlayer.stop();
-        return;
-    }
 }
 function windowResized() {
     p6_ResizeCanvas();

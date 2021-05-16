@@ -6,9 +6,11 @@ const gui = new dat.GUI()
 const params = {
     Download_Image: () => save(),
     Nombre : 0,
-    steps: 4,
+    steps: 30,
     temperature : 1,
 }
+gui.add(params, "steps",30,100,5)
+gui.add(params,"temperature",1,10,0.5)
 
 // -------------------
 //       Drawing
@@ -42,7 +44,7 @@ function setup() {
     console.log(chant.notes);
     const qns = mm.sequences.quantizeNoteSequence(chant, 4);
     music_rnn
-    .continueSequence(qns, 20,2.5)
+    .continueSequence(qns, params.steps,params.temperature)
     .then((sample) => rnnPlayer.start(sample));
     };
   };
