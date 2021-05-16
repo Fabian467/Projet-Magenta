@@ -2,25 +2,39 @@ var gui = new dat.GUI();
 var params = {
     Download_Image: function () { return save(); },
     Nombre: 0,
+    steps: 4,
+    temperature: 1,
 };
 var Usertext;
 var output;
 var Tabmot;
 var Partition;
+var music_rnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn');
+music_rnn.initialize();
+var rnnPlayer = new mm.Player();
+var player = new mm.Player();
 function setup() {
     p6_CreateCanvas();
     Usertext = createInput();
     Usertext.input(newTyping);
     output = select('#output');
-    var player = new mm.Player();
     document.getElementById('demarrer').onclick = function (event) {
-        Partition =
-            separer(Usertext);
+        Partition = separer(Usertext);
         var chant = createPartition(Partition);
         document.getElementById('chanson').onclick = function (event) { return player.start(chant); };
         player.stop();
+        if (rnnPlayer.isPlaying()) {
+            rnnPlayer.stop();
+            return;
+        }
+        console.log(chant.notes);
+        var qns = mm.sequences.quantizeNoteSequence(chant, 4);
+        music_rnn
+            .continueSequence(qns, 20, 2.5)
+            .then(function (sample) { return rnnPlayer.start(sample); });
     };
 }
+;
 function newTyping() {
     output.html(Usertext.value());
 }
@@ -42,7 +56,13 @@ function createPartition(Partition) {
     for (var i = 0; i < x; i++) {
         var y = Partition[i].length;
         for (var j = 0; j < y; j++) {
-            mot = (mot + unchar(Partition[i][j]) - 65 + 30) / y;
+            mot = ((mot + unchar(Partition[i][j]) - 20) / y | 0);
+        }
+        if (mot > 80) {
+            mot = (random(70, 80) | 0);
+        }
+        if (mot < 50) {
+            mot = (random(50, 60) | 0);
         }
         note = { pitch: mot, startTime: debut, endTime: fin };
         chanson.notes.push(note);
@@ -51,6 +71,13 @@ function createPartition(Partition) {
         chanson.totalTime = chanson.totalTime + 0.5;
     }
     return chanson;
+}
+function playInterpolation() {
+    var vaePlayer = new mm.Player();
+    if (vaePlayer.isPlaying()) {
+        vaePlayer.stop();
+        return;
+    }
 }
 function windowResized() {
     p6_ResizeCanvas();
