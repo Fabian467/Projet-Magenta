@@ -21,20 +21,21 @@ function setup() {
     document.getElementById('demarrer').onclick = function (event) {
         Partition = separer(Usertext);
         var chant = createPartition(Partition);
-        document.getElementById('chanson').onclick = function (event) { return player.start(chant); };
-        player.stop();
-        if (rnnPlayer.isPlaying()) {
-            rnnPlayer.stop();
-            return;
-        }
-        console.log(chant.notes);
-        var qns = mm.sequences.quantizeNoteSequence(chant, 4);
-        music_rnn
-            .continueSequence(qns, 20, 2.5)
-            .then(function (sample) { return rnnPlayer.start(sample); });
+        document.getElementById('chanson').onclick = function (event) {
+            player.start(chant);
+            player.stop();
+            if (rnnPlayer.isPlaying()) {
+                rnnPlayer.stop();
+                return;
+            }
+            console.log(chant.notes);
+            var qns = mm.sequences.quantizeNoteSequence(chant, 4);
+            music_rnn
+                .continueSequence(qns, 20, 2.5)
+                .then(function (sample) { return rnnPlayer.start(sample); });
+        };
     };
 }
-;
 function newTyping() {
     output.html(Usertext.value());
 }

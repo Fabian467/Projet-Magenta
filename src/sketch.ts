@@ -33,7 +33,7 @@ function setup() {
     output = select('#output');
     document.getElementById('demarrer').onclick = (event) => {Partition = separer(Usertext);
     const chant = createPartition(Partition);
-    document.getElementById('chanson').onclick = (event) => player.start(chant);
+    document.getElementById('chanson').onclick = (event) => {player.start(chant);
     player.stop();
     if (rnnPlayer.isPlaying()) {
       rnnPlayer.stop();
@@ -45,7 +45,7 @@ function setup() {
     .continueSequence(qns, 20,2.5)
     .then((sample) => rnnPlayer.start(sample));
     };
-  };
+  }
 }
 
 function newTyping(){
