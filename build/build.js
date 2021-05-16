@@ -14,7 +14,7 @@ var Partition;
 var music_rnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn');
 music_rnn.initialize();
 var rnnPlayer = new mm.Player();
-var player = new mm.Player();
+var chant;
 function setup() {
     p6_CreateCanvas();
     Usertext = createInput();
@@ -23,20 +23,21 @@ function setup() {
     document.getElementById('demarrer').onclick = function (event) {
         Partition = separer(Usertext);
         var chant = createPartition(Partition);
-        document.getElementById('chanson').onclick = function (event) {
-            player.start(chant);
-            player.stop();
-            if (rnnPlayer.isPlaying()) {
-                rnnPlayer.stop();
-                return;
-            }
-            console.log(chant.notes);
-            var qns = mm.sequences.quantizeNoteSequence(chant, 4);
-            music_rnn
-                .continueSequence(qns, params.steps, params.temperature)
-                .then(function (sample) { return rnnPlayer.start(sample); });
-        };
+        var player = new mm.Player();
+        player.start(chant);
+        player.stop();
+        if (rnnPlayer.isPlaying()) {
+            rnnPlayer.stop();
+            return;
+        }
+        console.log(chant.notes);
+        var qns = mm.sequences.quantizeNoteSequence(chant, 4);
+        music_rnn
+            .continueSequence(qns, params.steps, params.temperature)
+            .then(function (sample) { return rnnPlayer.start(sample); });
     };
+}
+function maj() {
 }
 function newTyping() {
     output.html(Usertext.value());
