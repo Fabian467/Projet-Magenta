@@ -84,24 +84,24 @@ function setup() {
     Usertext.style('background', 'transparent');
     Usertext.style('border', 'none');
     Usertext.style('outline', 'none');
-    Usertext.style('color', '#2a3366');
+    Usertext.style('color', '#383870');
     Usertext.style('textAlign', 'center');
     Usertext.size(windowWidth);
     button = createButton('Play');
     button.position(windowWidth / 2 - 50, windowHeight / 3.5);
     button.mousePressed(start);
     button.style('font-size', '30px');
-    button.style('color', '#F6F7FD');
+    button.style('color', '#FEF1FF');
     button.style('border', 'none');
-    button.style('background-color', '#2a3366');
+    button.style('background-color', '#383870');
     button.size(100);
 }
 function newTyping() {
     output.html(Usertext.value());
 }
 function draw() {
-    background('#98ACF8');
-    fill('#2a3366');
+    background('#D4C2F2');
+    fill('#383870');
     textSize(80);
     textStyle(BOLDITALIC);
     textFont(titlefont);
@@ -111,12 +111,12 @@ function draw() {
     textStyle(NORMAL);
     textFont(textfont);
     text('Type your text here:', windowWidth / 2, windowHeight / 5.5);
-    image(img, 0, windowHeight / 3 - img.height / 2, img.width / 2, img.height / 2);
-    image(img2, windowWidth - img.width / 2, windowHeight / 3 - img.height / 2, img.width / 2, img.height / 2);
-    fill('#6677B9');
+    image(img, 0, windowHeight / 3 - img.height / 1.5, img.width / 1.5, img.height / 1.5);
+    image(img2, windowWidth - img.width / 1.5, windowHeight / 3 - img.height / 1.5, img.width / 1.5, img.height / 1.5);
+    fill('#9A85C9');
     noStroke();
     rect(0, windowHeight / 3, windowWidth, 2 * windowHeight / 3);
-    fill('#F6F7FD');
+    fill('#FEF1FF');
     textSize(15);
     textAlign(LEFT, BOTTOM);
     text('Fabian Santiago, Cindy Hartmann', 20, windowHeight - 20);
