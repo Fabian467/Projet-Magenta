@@ -6,7 +6,7 @@
 // -------------------
 // Option 1 : Canvas with a fixed aspect ratio
 // -------------------
-const __ASPECT_RATIO = 1
+/*const __ASPECT_RATIO = 1
 const __MARGIN_SIZE = 25 // in pixels
 
 function __desiredCanvasWidth(): number {
@@ -26,19 +26,19 @@ function __desiredCanvasHeight(): number {
     else {
         return windowHeight - __MARGIN_SIZE * 2
     }
-}
+}*/
 
 // -------------------
 // Option 2 : Canvas that fills the window
 // -------------------
-// const __MARGIN_SIZE = 0 // in pixels
+const __MARGIN_SIZE = 0 // in pixels
 
-// function __desiredCanvasWidth(): number {
-//     return windowWidth - __MARGIN_SIZE * 2
-// }
-// function __desiredCanvasHeight(): number {
-//     return windowHeight - __MARGIN_SIZE * 2
-// }
+function __desiredCanvasWidth(): number {
+    return windowWidth - __MARGIN_SIZE * 2
+}
+function __desiredCanvasHeight(): number {
+    return windowHeight - __MARGIN_SIZE * 2
+}
 
 
 // -------------------

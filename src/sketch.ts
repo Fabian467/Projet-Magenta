@@ -13,40 +13,51 @@ gui.add(params, "steps",30,100,5)
 gui.add(params,"temperature",1,10,0.5)
 
 // -------------------
-//       Drawing
-// -------------------
-
-// -------------------
 //    Initialization
 // -------------------
+
+// Variables
+const music_rnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn');
+const rnnPlayer = new mm.Player();
+music_rnn.initialize();
 let Usertext;
 let output;
 let Tabmot;
 let Partition;
-const music_rnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn');
-music_rnn.initialize();
-const rnnPlayer = new mm.Player();
+let button;
+const chant;
+const player;
+var font;
 
-function setup() {
-    p6_CreateCanvas();
-    Usertext = createInput();
-    Usertext.input(newTyping);
-    output = select('#output');
-    document.getElementById('demarrer').onclick = (event) => {
-    Partition = separer(Usertext);
-    const chant = createPartition(Partition);
-    document.getElementById('chanson').onclick = (event) => {
-      if (rnnPlayer.isPlaying()) {
+
+
+// fonction pour commencer le programme
+function start() {
+  //Usertext.hide();
+  //button.hide();
+  startPlaying();
+  backgroundWords();
+}
+
+
+// fonction pour jouer la partition
+function startPlaying() {
+  Partition = separer(Usertext);
+    chant = createPartition(Partition);
+    player = new mm.Player();
+    player.start(chant);
+    player.stop();
+    if (rnnPlayer.isPlaying()) {
       rnnPlayer.stop();
       return;
     }
+    console.log(chant.notes);
     const qns = mm.sequences.quantizeNoteSequence(chant, 4);
     music_rnn
     .continueSequence(qns, params.steps,params.temperature)
     .then((sample) => rnnPlayer.start(sample));
-    };
-  };
 }
+
 
 function newTyping(){
   output.html(Usertext.value());
@@ -88,6 +99,105 @@ function separer(Usertext) {
     return chanson;
   }
 
+// fonction pour afficher le texte en arrière plan
+function backgroundWords() {
+  const text = Usertext.value();
+  //affichage random
+  for (let i = 0; i < 100; i++) {
+    push();
+      fill(random(255), 255, 255);
+      translate(random(width), random(height));
+      rotate(random(2 * PI));
+      text(text, 0, 0);
+    pop();
+    }
+}  
+
+
+
+
+// Chargement des polices et des images
+function preload() {
+  titlefont = loadFont('./fonts/Pacifico-Regular.ttf');
+  textfont = loadFont('./fonts/Montserrat-Medium.ttf');
+  img = loadImage('./img/cloud.png');
+}
+
+
+
+function setup() {
+
+  // création de l'espace
+  p6_CreateCanvas();
+  output = select('#output');
+
+  // boite pour rentrer le texte
+  Usertext = createInput('Music is the language of the spirit. It opens the secret of life bringing peace, abolishing strife.');
+  Usertext.position(0,windowHeight/5+20);
+  Usertext.style('background','transparent');
+  Usertext.style('border','none');
+  Usertext.style('outline','none');
+  Usertext.style('color', '#2a3d66');
+  Usertext.style('textAlign', 'center');
+  Usertext.size(windowWidth);
+
+  // affichage bouton
+  button = createButton('Play');
+  button.position(windowWidth/2-50, windowHeight/3.5);
+  button.mousePressed(start);
+  button.style('font-size', '30px');
+  button.style('color', '#ffffff');
+  button.style('border','none');
+  button.style('font-family', 'Helvetica');
+  button.style('background-color', '#2a3d66');
+  button.size(100);
+}
+
+function ecriture(Usertext){
+  output.html(Usertext.value());
+}
+// Décor
+function draw() {
+
+  background('#DA9FF8');
+
+  // Titre "Muse"
+  fill('#2a3d66');
+  textSize(80);
+  textStyle(BOLDITALIC);
+  textFont(titlefont);
+  textAlign(CENTER, CENTER);
+  text('Muse', windowWidth/2, windowHeight/10);
+  
+  // Texte informatif "type your text here:"
+  textSize(30);
+  textStyle(NORMAL);
+  textFont(textfont);
+  text('Type your text here:', windowWidth/2, windowHeight/5.5);
+
+  // Nuages ~
+  image(img, 0, windowHeight/4, img.width / 2, img.height / 2);
+
+  // Rectangle bas
+  fill('#B088F9');
+  noStroke();
+  rect(0, windowHeight/3, windowWidth, 2*windowHeight/3);
+
+  // Crédits de bas de page
+  fill('#ffffff');
+  textSize(15);
+  textAlign(LEFT, BOTTOM);
+  text('Fabian Santiago, Cindy Hartmann', 20, windowHeight-20);
+  textAlign(RIGHT, BOTTOM);
+  text('Algortihmic Aesthetic Project ~ 2021', windowWidth-20, windowHeight-20);
+
+  // Texte rentré par l'utilisateur
+  if (keyIsPressed){
+  ecriture(Usertext);
+  }
+}
+
+// fonction pour resize
 function windowResized() {
     p6_ResizeCanvas()
 }
