@@ -89,7 +89,8 @@ function backgroundWords() {
 function preload() {
     titlefont = loadFont('./fonts/Pacifico-Regular.ttf');
     textfont = loadFont('./fonts/Montserrat-Medium.ttf');
-    img = loadImage('./img/cloud.png');
+    img = loadImage('./img/cloudreversed.png');
+    img2 = loadImage('./img/cloud.png');
 }
 function setup() {
     p6_CreateCanvas();
@@ -98,22 +99,21 @@ function setup() {
     Usertext.style('background', 'transparent');
     Usertext.style('border', 'none');
     Usertext.style('outline', 'none');
-    Usertext.style('color', '#2a3d66');
+    Usertext.style('color', '#2a3366');
     Usertext.style('textAlign', 'center');
     Usertext.size(windowWidth);
     button = createButton('Play');
     button.position(windowWidth / 2 - 50, windowHeight / 3.5);
     button.mousePressed(start);
     button.style('font-size', '30px');
-    button.style('color', '#ffffff');
+    button.style('color', '#F6F7FD');
     button.style('border', 'none');
-    button.style('font-family', 'Helvetica');
-    button.style('background-color', '#2a3d66');
+    button.style('background-color', '#2a3366');
     button.size(100);
 }
 function draw() {
-    background('#DA9FF8');
-    fill('#2a3d66');
+    background('#98ACF8');
+    fill('#2a3366');
     textSize(80);
     textStyle(BOLDITALIC);
     textFont(titlefont);
@@ -123,18 +123,19 @@ function draw() {
     textStyle(NORMAL);
     textFont(textfont);
     text('Type your text here:', windowWidth / 2, windowHeight / 5.5);
-    image(img, 0, windowHeight / 4, img.width / 2, img.height / 2);
-    fill('#B088F9');
+    image(img, 0, windowHeight / 3 - img.height / 2, img.width / 2, img.height / 2);
+    image(img2, windowWidth - img.width / 2, windowHeight / 3 - img.height / 2, img.width / 2, img.height / 2);
+    fill('#6677B9');
     noStroke();
     rect(0, windowHeight / 3, windowWidth, 2 * windowHeight / 3);
-    fill('#ffffff');
+    fill('#F6F7FD');
     textSize(15);
     textAlign(LEFT, BOTTOM);
     text('Fabian Santiago, Cindy Hartmann', 20, windowHeight - 20);
     textAlign(RIGHT, BOTTOM);
     text('Algortihmic Aesthetic Project ~ 2021', windowWidth - 20, windowHeight - 20);
     textSize(35);
-    fill('#2a3d66');
+    fill('#2a3366');
     textFont(titlefont);
     textAlign(CENTER, CENTER);
     text("\" " + Usertext.value() + " \"", windowWidth / 2, windowHeight / 2);
