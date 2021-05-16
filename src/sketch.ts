@@ -23,20 +23,32 @@ let Usertext;
 let output;
 let Tabmot;
 let Partition;
+let button;
 const music_rnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn');
 music_rnn.initialize();
 const rnnPlayer = new mm.Player();
 const chant;
+const player;
 
 function setup() {
+
     p6_CreateCanvas();
+
     Usertext = createInput();
-    Usertext.input(newTyping);
-    output = select('#output');
-    document.getElementById('demarrer').onclick = (event) => {
-    Partition = separer(Usertext);
-    const chant = createPartition(Partition);
-    const player = new mm.Player();
+    Usertext.position(20,75);
+
+    button = createButton('Play');
+    button.position(Usertext.x+Usertext.width, 65);
+    button.mousePressed(startPlaying);
+    button.style('font-size', '30px');
+    button.style('background-color', col);
+
+}
+
+function startPlaying() {
+  Partition = separer(Usertext);
+    chant = createPartition(Partition);
+    player = new mm.Player();
     player.start(chant);
     player.stop();
     if (rnnPlayer.isPlaying()) {
@@ -48,7 +60,17 @@ function setup() {
     music_rnn
     .continueSequence(qns, params.steps,params.temperature)
     .then((sample) => rnnPlayer.start(sample));
-  };
+}
+
+function background() {
+  for (let i = 0; i < 100; i++) {
+    push();
+    fill(random(255), 255, 255);
+    translate(random(width), random(height));
+    rotate(random(2 * PI));
+    text(Usertext.value(), 0, 0);
+    pop();
+  }
 }
 
 function maj(){

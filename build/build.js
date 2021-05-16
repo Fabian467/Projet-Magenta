@@ -11,31 +11,47 @@ var Usertext;
 var output;
 var Tabmot;
 var Partition;
+var button;
 var music_rnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn');
 music_rnn.initialize();
 var rnnPlayer = new mm.Player();
 var chant;
+var player;
 function setup() {
     p6_CreateCanvas();
     Usertext = createInput();
-    Usertext.input(newTyping);
-    output = select('#output');
-    document.getElementById('demarrer').onclick = function (event) {
-        Partition = separer(Usertext);
-        var chant = createPartition(Partition);
-        var player = new mm.Player();
-        player.start(chant);
-        player.stop();
-        if (rnnPlayer.isPlaying()) {
-            rnnPlayer.stop();
-            return;
-        }
-        console.log(chant.notes);
-        var qns = mm.sequences.quantizeNoteSequence(chant, 4);
-        music_rnn
-            .continueSequence(qns, params.steps, params.temperature)
-            .then(function (sample) { return rnnPlayer.start(sample); });
-    };
+    Usertext.position(20, 75);
+    button = createButton('Play');
+    button.position(Usertext.x + Usertext.width, 65);
+    button.mousePressed(startPlaying);
+    button.style('font-size', '30px');
+    button.style('background-color', col);
+}
+function startPlaying() {
+    Partition = separer(Usertext);
+    chant = createPartition(Partition);
+    player = new mm.Player();
+    player.start(chant);
+    player.stop();
+    if (rnnPlayer.isPlaying()) {
+        rnnPlayer.stop();
+        return;
+    }
+    console.log(chant.notes);
+    var qns = mm.sequences.quantizeNoteSequence(chant, 4);
+    music_rnn
+        .continueSequence(qns, params.steps, params.temperature)
+        .then(function (sample) { return rnnPlayer.start(sample); });
+}
+function background() {
+    for (var i = 0; i < 100; i++) {
+        push();
+        fill(random(255), 255, 255);
+        translate(random(width), random(height));
+        rotate(random(2 * PI));
+        text(Usertext.value(), 0, 0);
+        pop();
+    }
 }
 function maj() {
 }
