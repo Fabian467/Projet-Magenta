@@ -17,12 +17,11 @@ var Partition;
 var button;
 var chant;
 var player;
-var font;
+var textfont;
+var titlefont;
+var img;
+var img2;
 function start() {
-    startPlaying();
-    backgroundWords();
-}
-function startPlaying() {
     Partition = separer(Usertext);
     chant = createPartition(Partition);
     player = new mm.Player();
@@ -37,9 +36,6 @@ function startPlaying() {
     music_rnn
         .continueSequence(qns, params.steps, params.temperature)
         .then(function (sample) { return rnnPlayer.start(sample); });
-}
-function newTyping() {
-    output.html(Usertext.value());
 }
 function separer(Usertext) {
     var Tabmot = splitTokens(Usertext.elt.value);
@@ -75,71 +71,59 @@ function createPartition(Partition) {
     }
     return chanson;
 }
-function backgroundWords() {
-    var text = Usertext.value();
-    for (var i = 0; i < 100; i++) {
-        push();
-        fill(random(255), 255, 255);
-        translate(random(width), random(height));
-        rotate(random(2 * PI));
-        text(text, 0, 0);
-        pop();
-    }
-}
 function preload() {
     titlefont = loadFont('./fonts/Pacifico-Regular.ttf');
     textfont = loadFont('./fonts/Montserrat-Medium.ttf');
-    img = loadImage('./img/cloud.png');
+    img = loadImage('./img/cloudreversed.png');
+    img2 = loadImage('./img/cloud.png');
 }
 function setup() {
     p6_CreateCanvas();
-    output = select('#output');
-    Usertext = createInput('Music is the language of the spirit. It opens the secret of life bringing peace, abolishing strife.');
+    Usertext = createInput('\"Music is the language of the spirit. It opens the secret of life bringing peace, abolishing strife.\" ~ Kahlil Gibran');
     Usertext.position(0, windowHeight / 5 + 20);
     Usertext.style('background', 'transparent');
     Usertext.style('border', 'none');
     Usertext.style('outline', 'none');
-    Usertext.style('color', '#2a3d66');
+    Usertext.style('color', '#2a3366');
     Usertext.style('textAlign', 'center');
     Usertext.size(windowWidth);
     button = createButton('Play');
     button.position(windowWidth / 2 - 50, windowHeight / 3.5);
     button.mousePressed(start);
     button.style('font-size', '30px');
-    button.style('color', '#ffffff');
+    button.style('color', '#F6F7FD');
     button.style('border', 'none');
-    button.style('font-family', 'Helvetica');
-    button.style('background-color', '#2a3d66');
+    button.style('background-color', '#2a3366');
     button.size(100);
 }
-function ecriture(Usertext) {
+function newTyping() {
     output.html(Usertext.value());
 }
 function draw() {
-    background('#DA9FF8');
-    fill('#2a3d66');
+    background('#98ACF8');
+    fill('#2a3366');
     textSize(80);
     textStyle(BOLDITALIC);
     textFont(titlefont);
     textAlign(CENTER, CENTER);
-    text('Muse', windowWidth / 2, windowHeight / 10);
+    text('Muse', windowWidth / 2 - 5, windowHeight / 10);
     textSize(30);
     textStyle(NORMAL);
     textFont(textfont);
     text('Type your text here:', windowWidth / 2, windowHeight / 5.5);
-    image(img, 0, windowHeight / 4, img.width / 2, img.height / 2);
-    fill('#B088F9');
+    image(img, 0, windowHeight / 3 - img.height / 2, img.width / 2, img.height / 2);
+    image(img2, windowWidth - img.width / 2, windowHeight / 3 - img.height / 2, img.width / 2, img.height / 2);
+    fill('#6677B9');
     noStroke();
     rect(0, windowHeight / 3, windowWidth, 2 * windowHeight / 3);
-    fill('#ffffff');
+    fill('#F6F7FD');
     textSize(15);
     textAlign(LEFT, BOTTOM);
     text('Fabian Santiago, Cindy Hartmann', 20, windowHeight - 20);
     textAlign(RIGHT, BOTTOM);
     text('Algortihmic Aesthetic Project ~ 2021', windowWidth - 20, windowHeight - 20);
-    if (keyIsPressed) {
-        ecriture(Usertext);
-    }
+    Usertext.input(newTyping);
+    output = select('#output');
 }
 function windowResized() {
     p6_ResizeCanvas();

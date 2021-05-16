@@ -2,23 +2,26 @@
   <head>
     <script src="https://cdn.jsdelivr.net/npm/@magenta/music@^1.0.0"></script>
     <style>
-        html {
-            background-color: rgb(235, 235, 235);
-        }
         .p5Canvas {
             z-index: -1;
         }
         p{
           font-size: 35;
           font-family:Pacifico-Regular ;
-          color :#2a3d66;
+          color :#2a3366;
           text-align: center;
+          position: relative;
+          top: 40%;
+          margin: 0;
+          padding: 0;
+          padding-left: 10%;
+          padding-right: 10%;
         }
     </style>
   </head>
 
   <body>
-    <p id = "output" style="position: absolute;vertical-align: text-bottom;"></p>
+    <p id = "output"></p>
   </body>
 
   <script src = "./lib/dat.gui.min.js"></script>

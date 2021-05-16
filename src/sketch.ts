@@ -16,7 +16,9 @@ gui.add(params,"temperature",1,10,0.5)
 //    Initialization
 // -------------------
 
-// Variables
+
+
+// Déclaration des variables utilisées
 const music_rnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn');
 const rnnPlayer = new mm.Player();
 music_rnn.initialize();
@@ -27,21 +29,15 @@ let Partition;
 let button;
 const chant;
 const player;
-var font;
+var textfont;
+var titlefont;
+var img;
+var img2;
 
 
 
-// fonction pour commencer le programme
+// Fonction pour lancer le lecteur audio
 function start() {
-  //Usertext.hide();
-  //button.hide();
-  startPlaying();
-  backgroundWords();
-}
-
-
-// fonction pour jouer la partition
-function startPlaying() {
   Partition = separer(Usertext);
     chant = createPartition(Partition);
     player = new mm.Player();
@@ -59,60 +55,46 @@ function startPlaying() {
 }
 
 
-function newTyping(){
-  output.html(Usertext.value());
-}
 
+// Séparation des mots du texte
 function separer(Usertext) {
   let Tabmot = splitTokens(Usertext.elt.value);
   print (Tabmot);
   return Tabmot;
 }
 
-  function createPartition(Partition){
-    let debut = 0.0;
-    let fin = 0.5;
-    let note;
-    let mot = 0;
-    const chanson = {
-      notes:[],
-      totalTime : 0
-    };
-    let x = Partition.length;
-    for(let i=0; i<x;i++){
-      let y = Partition[i].length;
-      for(let j=0; j<y; j++){
-        mot = ((mot + unchar(Partition[i][j]) - 20)/y | 0);
-      }
-      if(mot>80){
-        mot = (random(70,80) | 0);
-      }
-      if(mot<50){
-        mot = (random(50,60) | 0);
-      }
-      note = {pitch: mot, startTime: debut, endTime: fin};
-      chanson.notes.push(note);
-      debut = debut + 0.5;
-      fin = fin + 0.5;
-      chanson.totalTime = chanson.totalTime + 0.5;
+
+
+// Création de la Partition
+function createPartition(Partition){
+  let debut = 0.0;
+  let fin = 0.5;
+  let note;
+  let mot = 0;
+  const chanson = {
+    notes:[],
+    totalTime : 0
+  };
+  let x = Partition.length;
+  for(let i=0; i<x;i++){
+    let y = Partition[i].length;
+    for(let j=0; j<y; j++){
+      mot = ((mot + unchar(Partition[i][j]) - 20)/y | 0);
     }
-    return chanson;
+    if(mot>80){
+      mot = (random(70,80) | 0);
+    }
+    if(mot<50){
+      mot = (random(50,60) | 0);
+    }
+    note = {pitch: mot, startTime: debut, endTime: fin};
+    chanson.notes.push(note);
+    debut = debut + 0.5;
+    fin = fin + 0.5;
+    chanson.totalTime = chanson.totalTime + 0.5;
   }
-
-// fonction pour afficher le texte en arrière plan
-function backgroundWords() {
-  const text = Usertext.value();
-  //affichage random
-  for (let i = 0; i < 100; i++) {
-    push();
-      fill(random(255), 255, 255);
-      translate(random(width), random(height));
-      rotate(random(2 * PI));
-      text(text, 0, 0);
-    pop();
-    }
-}  
-
+  return chanson;
+}
 
 
 
@@ -120,7 +102,8 @@ function backgroundWords() {
 function preload() {
   titlefont = loadFont('./fonts/Pacifico-Regular.ttf');
   textfont = loadFont('./fonts/Montserrat-Medium.ttf');
-  img = loadImage('./img/cloud.png');
+  img = loadImage('./img/cloudreversed.png');
+  img2 = loadImage('./img/cloud.png');
 }
 
 
@@ -129,15 +112,14 @@ function setup() {
 
   // création de l'espace
   p6_CreateCanvas();
-  output = select('#output');
 
   // boite pour rentrer le texte
-  Usertext = createInput('Music is the language of the spirit. It opens the secret of life bringing peace, abolishing strife.');
+  Usertext = createInput('\"Music is the language of the spirit. It opens the secret of life bringing peace, abolishing strife.\" ~ Kahlil Gibran');
   Usertext.position(0,windowHeight/5+20);
   Usertext.style('background','transparent');
   Usertext.style('border','none');
   Usertext.style('outline','none');
-  Usertext.style('color', '#2a3d66');
+  Usertext.style('color', '#2a3366');
   Usertext.style('textAlign', 'center');
   Usertext.size(windowWidth);
 
@@ -146,28 +128,33 @@ function setup() {
   button.position(windowWidth/2-50, windowHeight/3.5);
   button.mousePressed(start);
   button.style('font-size', '30px');
-  button.style('color', '#ffffff');
+  button.style('color', '#F6F7FD');
   button.style('border','none');
-  button.style('font-family', 'Helvetica');
-  button.style('background-color', '#2a3d66');
+  button.style('background-color', '#2a3366');
   button.size(100);
 }
 
-function ecriture(Usertext){
+
+
+// Fonction pour retaper le texte en html
+function newTyping(){
   output.html(Usertext.value());
 }
-// Décor
+
+
+
+// Dessin de la page
 function draw() {
 
-  background('#DA9FF8');
+  background('#98ACF8');
 
   // Titre "Muse"
-  fill('#2a3d66');
+  fill('#2a3366');
   textSize(80);
   textStyle(BOLDITALIC);
   textFont(titlefont);
   textAlign(CENTER, CENTER);
-  text('Muse', windowWidth/2, windowHeight/10);
+  text('Muse', windowWidth/2-5, windowHeight/10);
   
   // Texte informatif "type your text here:"
   textSize(30);
@@ -176,15 +163,21 @@ function draw() {
   text('Type your text here:', windowWidth/2, windowHeight/5.5);
 
   // Nuages ~
-  image(img, 0, windowHeight/4, img.width / 2, img.height / 2);
+  image(img, 0, windowHeight/3-img.height/2, img.width/2, img.height/2);
+  image(img2, windowWidth-img.width/2, windowHeight/3-img.height/2, img.width/2, img.height/2);
 
-  // Rectangle bas
-  fill('#B088F9');
+  // Rectangle page (bleu)
+  fill('#6677B9');
   noStroke();
   rect(0, windowHeight/3, windowWidth, 2*windowHeight/3);
 
+  // Rectangle texte (blanc)
+  /*fill('#F6F7FD');
+  noStroke();
+  rect(windowWidth/5, 2*windowHeight/5, 3*windowWidth/5, 2.5*windowHeight/5);*/
+
   // Crédits de bas de page
-  fill('#ffffff');
+  fill('#F6F7FD');
   textSize(15);
   textAlign(LEFT, BOTTOM);
   text('Fabian Santiago, Cindy Hartmann', 20, windowHeight-20);
@@ -192,12 +185,13 @@ function draw() {
   text('Algortihmic Aesthetic Project ~ 2021', windowWidth-20, windowHeight-20);
 
   // Texte rentré par l'utilisateur
-  if (keyIsPressed){
-  ecriture(Usertext);
-  }
+  Usertext.input(newTyping);
+  output = select('#output');
 }
 
-// fonction pour resize
+
+
+// Fonction pour resize la toile
 function windowResized() {
     p6_ResizeCanvas()
 }
