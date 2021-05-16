@@ -7,25 +7,35 @@ var params = {
 };
 gui.add(params, "steps", 30, 100, 5);
 gui.add(params, "temperature", 1, 10, 0.5);
+var music_rnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn');
+var rnnPlayer = new mm.Player();
+music_rnn.initialize();
 var Usertext;
 var output;
 var Tabmot;
 var Partition;
 var button;
-var music_rnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn');
-music_rnn.initialize();
-var rnnPlayer = new mm.Player();
 var chant;
 var player;
 function setup() {
     p6_CreateCanvas();
-    Usertext = createInput();
+    Usertext = createInput('Music is the language of the spirit. It opens the secret of life bringing peace, abolishing strife.');
     Usertext.position(20, 75);
+    Usertext.style('background', 'transparent');
+    Usertext.style('border', '#ffffff');
+    Usertext.style('outline', 'none');
     button = createButton('Play');
-    button.position(Usertext.x + Usertext.width, 65);
-    button.mousePressed(startPlaying);
+    button.position(windowWidth / 2, windowHeight / 3);
+    button.mousePressed(start);
     button.style('font-size', '30px');
-    button.style('background-color', col);
+    button.style('color', '#ffffff');
+    button.style('border', 'none');
+    button.style('font-family', 'Helvetica');
+    button.style('background-color', '#260E63');
+}
+function start() {
+    startPlaying();
+    backgroundWords();
 }
 function startPlaying() {
     Partition = separer(Usertext);
@@ -42,18 +52,6 @@ function startPlaying() {
     music_rnn
         .continueSequence(qns, params.steps, params.temperature)
         .then(function (sample) { return rnnPlayer.start(sample); });
-}
-function background() {
-    for (var i = 0; i < 100; i++) {
-        push();
-        fill(random(255), 255, 255);
-        translate(random(width), random(height));
-        rotate(random(2 * PI));
-        text(Usertext.value(), 0, 0);
-        pop();
-    }
-}
-function maj() {
 }
 function newTyping() {
     output.html(Usertext.value());
@@ -92,28 +90,41 @@ function createPartition(Partition) {
     }
     return chanson;
 }
+function backgroundWords() {
+    var text = Usertext.value();
+    for (var i = 0; i < 100; i++) {
+        push();
+        fill(random(255), 255, 255);
+        translate(random(width), random(height));
+        rotate(random(2 * PI));
+        text(text, 0, 0);
+        pop();
+    }
+}
+function draw() {
+    background('#DA9FF8');
+    fill('#6751C4');
+    textSize(50);
+    textStyle(BOLDITALIC);
+    textAlign(CENTER, CENTER);
+    text('Muse', windowWidth / 2, 60);
+    fill('#B088F9');
+    noStroke();
+    rect(0, windowHeight / 3, windowWidth, 2 * windowHeight / 3);
+    fill('#000000');
+    textSize(20);
+    text(Usertext.value(), 50, 700);
+    h1.html(Usertext.value());
+}
 function windowResized() {
     p6_ResizeCanvas();
 }
-var __ASPECT_RATIO = 1;
-var __MARGIN_SIZE = 25;
+var __MARGIN_SIZE = 0;
 function __desiredCanvasWidth() {
-    var windowRatio = windowWidth / windowHeight;
-    if (__ASPECT_RATIO > windowRatio) {
-        return windowWidth - __MARGIN_SIZE * 2;
-    }
-    else {
-        return __desiredCanvasHeight() * __ASPECT_RATIO;
-    }
+    return windowWidth - __MARGIN_SIZE * 2;
 }
 function __desiredCanvasHeight() {
-    var windowRatio = windowWidth / windowHeight;
-    if (__ASPECT_RATIO > windowRatio) {
-        return __desiredCanvasWidth() / __ASPECT_RATIO;
-    }
-    else {
-        return windowHeight - __MARGIN_SIZE * 2;
-    }
+    return windowHeight - __MARGIN_SIZE * 2;
 }
 var __canvas;
 function __centerCanvas() {
